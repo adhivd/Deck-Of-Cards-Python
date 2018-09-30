@@ -94,13 +94,3 @@ class Player(object):
 # Test making a Card
 # card = Card('Spades', 6)
 # print card
-
-# Test making a Deck
-myDeck = Deck()
-myDeck.shuffle()
-# deck.show()
-
-bob = Player("Bob")
-bob.sayHello()
-bob.draw(myDeck, 15)
-bob.showHand()
