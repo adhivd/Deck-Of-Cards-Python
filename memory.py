@@ -6,14 +6,14 @@ import numbers
 import sys
 
 class Game(object):
-    def __init__(self):
+    def __init__(self, begin=None):
         self.answerGrid = None
         self.score = 0
         self.turns = 1
         begin = self.intro()
         if(begin == "y" or begin == "yes"):
             self.setup()
-            self.start()
+            self.runGame()
         else:
             print("Goodbye!")
             return
@@ -40,9 +40,7 @@ class Game(object):
         deck.shuffle()
 
         self.answerGrid = [[deck.deal() for _ in range(4)] for _ in range(13)]
-        # print(self.answerGrid)
         self.userGrid = [["🃏" for _ in range(4)] for _ in range(13)]
-        # self.showGrid()
 
         time.sleep(0.5)
         print("Initializing the blockchain . . .")
@@ -52,24 +50,24 @@ class Game(object):
         print("Let's play!")
         time.sleep(1)
 
-    def start(self):
+    def runGame(self):
         # print out instructions
         while self.score != 26:
             self.showGrid()
             firstCard = self.askForRowCol()
             if firstCard == 'god mode':
-                self.showAnswerGrid()
+                self.showGrid(None,None,True)
                 continue
             if firstCard == 'exit':
-                self.showAnswerGrid()
+                self.showGrid(None,None,True)
                 return
             self.showGrid(firstCard)
             secondCard = self.askForRowCol(firstCard)
             if secondCard == 'god mode':
-                self.showAnswerGrid()
+                self.showGrid(None,None,True)
                 continue
             if secondCard == 'exit':
-                self.showAnswerGrid()
+                self.showGrid(None,None,True)
                 return
             self.showGrid(firstCard, secondCard)
             self.checkTurn(firstCard, secondCard)
@@ -114,7 +112,6 @@ class Game(object):
         return coords
 
     def convertRowColIntoCoordinates(self, row, col):
-
         r = row - 1
         if col == "a":
             c = 0
@@ -138,8 +135,9 @@ class Game(object):
         c2 = self.answerGrid[secondCard[0]][secondCard[1]]
 
         if c1.value == c2.value or c1.suit == c2.suit:
-            print("🎉 Congrats! You've matched the {}  and {}  cards. Moving on to next turn".format(c1,c2))
             self.score += 1
+            self.showGrid(firstCard,secondCard)
+            print("🎉 Congrats! You've matched the {}  and {}  cards. Moving on to next turn".format(c1,c2))
             time.sleep(3)
         else:
             print("🚫 Incorrect Match! The pair you've selected ({}  and {}  ) will be turned face down in a few seconds . . .".format(c1,c2))
@@ -148,21 +146,27 @@ class Game(object):
             time.sleep(4)
 
 
-    def showGrid(self, firstCard=None, secondCard=None):
+    def showGrid(self, firstCard=None, secondCard=None, godMode=False):
         os.system('cls' if os.name == 'nt' else 'clear')
 
         row = 1
         # for c in range(4):
         #     print
         print("      columns")
-        print("row   a   b   c   d")
+        print("      a   b   c   d")
+        print("row")
+        if godMode:
+            grid = self.answerGrid
+        else:
+            grid = self.userGrid
+
         if firstCard:
             self.userGrid[firstCard[0]][firstCard[1]] = self.answerGrid[firstCard[0]][firstCard[1]]
         if secondCard:
             self.userGrid[secondCard[0]][secondCard[1]] = self.answerGrid[secondCard[0]][secondCard[1]]
         # self.userGrid[2][1] = "A♥️"
         # self.userGrid[2][2] = "A♥️"
-        for r in self.userGrid:
+        for r in grid:
             if(row < 10):
                 print('{}     '.format(row), end='')
             else:
