@@ -12,20 +12,20 @@ class Card(object):
         return self.show()
     def __repr__(self):
         return self.show()
-        
+
     def show(self):
         if self.value == 1:
-            val = "Ace"
+            val = "A"
         elif self.value == 11:
-            val = "Jack"
+            val = "J"
         elif self.value == 12:
-            val = "Queen"
+            val = "Q"
         elif self.value == 13:
-            val = "King"
+            val = "K"
         else:
             val = self.value
 
-        return "{} of {}".format(val, self.suit)
+        return "{}{}".format(val, self.suit)
 
 
 class Deck(object):
@@ -36,12 +36,12 @@ class Deck(object):
     # Display all cards in the deck
     def show(self):
         for card in self.cards:
-            print card.show()
+            print(card.show())
 
     # Generate 52 cards
     def build(self):
         self.cards = []
-        for suit in ['Hearts', 'Clubs', 'Diamonds', 'Spades']:
+        for suit in ['♥️', '♣️', '♦️', '♠️']:
             for val in range(1,14):
                 self.cards.append(Card(suit, val))
 
@@ -69,7 +69,7 @@ class Player(object):
         self.hand = []
 
     def sayHello(self):
-        print "Hi! My name is {}".format(self.name)
+        print("Hi! My name is {}".format(self.name))
         return self
 
     # Draw n number of cards from a deck
@@ -79,13 +79,13 @@ class Player(object):
             card = deck.deal()
             if card:
                 self.hand.append(card)
-            else: 
+            else:
                 return False
         return True
 
     # Display all the cards in the players hand
     def showHand(self):
-        print "{}'s hand: {}".format(self.name, self.hand)
+        print("{}'s hand: {}".format(self.name, self.hand))
         return self
 
     def discard(self):
@@ -102,5 +102,5 @@ myDeck.shuffle()
 
 bob = Player("Bob")
 bob.sayHello()
-bob.draw(myDeck, 5)
+bob.draw(myDeck, 15)
 bob.showHand()
