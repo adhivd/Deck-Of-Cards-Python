@@ -1,9 +1,10 @@
 import random
 
 class Card(object):
-    def __init__(self, suit, val):
+    def __init__(self, suit, val, faceDown=False):
         self.suit = suit
         self.value = val
+        self.faceDown = faceDown
 
     # Implementing build in methods so that you can print a card object
     def __unicode__(self):
@@ -13,7 +14,10 @@ class Card(object):
     def __repr__(self):
         return self.show()
 
-    def show(self):
+    # showFace = True will show the real value of a card
+    def show(self, showFace=False):
+        if self.faceDown and not showFace:
+            return "🃏"
         if self.value == 1:
             val = "A"
         elif self.value == 11:
@@ -27,11 +31,14 @@ class Card(object):
 
         return "{}{}".format(val, self.suit)
 
+    def flip(self):
+        self.faceDown = not self.faceDown
+
 
 class Deck(object):
-    def __init__(self):
+    def __init__(self,faceDown=False):
         self.cards = []
-        self.build()
+        self.build(faceDown)
 
     # Display all cards in the deck
     def show(self):
@@ -39,11 +46,11 @@ class Deck(object):
             print(card.show())
 
     # Generate 52 cards
-    def build(self):
+    def build(self,faceDown=False):
         self.cards = []
         for suit in ['♥️', '♣️', '♦️', '♠️']:
             for val in range(1,14):
-                self.cards.append(Card(suit, val))
+                self.cards.append(Card(suit, val, faceDown))
 
     # Shuffle the deck
     def shuffle(self, num=1):
